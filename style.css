@@ -1,0 +1,952 @@
+@font-face { /* 可愛字體 */
+  font-family: 'cute_word';
+  src: url('font/Humour-Normal.woff2') format('woff2'); /*/humour_web*/
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*gpt的滾動特效*/
+html {scroll-behavior: smooth;}
+#main-dish, #side-dish, #drinks, #dessert, #subscribe, #footer {
+  scroll-margin-top: 15px; /* 視實際navbar高度調整 */
+}
+
+
+/* 基本樣式 */
+* {box-sizing: border-box;}
+body {font-family: "cute_word", sans-serif; margin: 0;}
+a {text-decoration: none; color: #8C7764; } /*原始:#333*/
+button {cursor: pointer; font-family: "Roboto", sans-serif; }
+img {display: block; object-fit: cover; width: 100%;}
+
+
+.sidebar {
+  position: fixed; top: 0; left: 0;
+  width: 250px; height: 100%;
+  background:#f7f2af ; padding: 16px; /*#fff*/
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  overflow-y: auto; z-index: 3;
+  transition: transform 0.3s ease;
+}
+.sidebar .logo {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:24px;
+}
+.sidebar ul { list-style:none; padding:0; }
+.sidebar li { /* 列表前的可愛圖示 */
+  background-repeat: no-repeat;
+  background-size: 25px 25px; /* 控制圖示大小 */
+  padding-left: 30px;         /* 為圖示留空間 */
+  background-position: 0 center; /* 調整垂直對齊 */
+  margin: 8px 0;
+}
+.sidebar .main-dish {background-image: url('img/main_dish.png');}
+.sidebar .side-dish {background-image: url('img/side_dish.png');}
+.sidebar .drinks {background-image: url('img/drinks.png');}
+.sidebar .dessert {background-image: url('img/dessert.png');}
+ul>li>a:hover {opacity: 0.7;}
+
+.sidebar .menu a {display: block; padding: 8px}
+.sidebar .submenu {display:none; padding-left:16px;}
+.sidebar .menu-bottom {margin-top:32px; }
+.sidebar .menu-bottom a {display: block; padding: 8px}
+.close-btn { position: absolute; top: 10px; right: 15px; cursor: pointer;}
+
+#closeSidebar{
+  display: none;
+  width: 25px; height: auto;
+}
+#closeSidebar:hover{opacity: 0.8;}
+
+#sidebar.hide {transform: translateX(-250px); }
+#sidebar.show {transform: translateX(0); }
+
+
+/* Topbar 小螢幕 */
+#topbar {
+  display: none; position: fixed; top: 0; left: 0;
+  width: 100%;
+  background: black; color: white;
+  padding: 12px 16px;
+  z-index: 1;
+  justify-content: space-between; align-items: center;
+}
+#topbar .menu-toggle {cursor: pointer; font-size:24px;}
+
+/* Overlay */
+.overlay1 {
+  display:none; position:fixed; top:0; left:0;
+  width:100%; height:100%; background: rgba(0,0,0,0.5);
+  z-index: 2;
+}
+
+/* Main Content */
+#mainContent {
+  margin-left: 250px; padding: 16px; transition: margin-left 0.3s ease;
+  background-color: rgb(255, 255, 234);
+}
+.page-header {display:flex; justify-content:space-between; align-items:center;   }
+.page-header-title{
+  margin-top: 20px;
+  color: #8C7764;
+  font-size: 30px;
+}
+.page-header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.search-icon {
+  font-size: 28px;
+  color: #8C7764;
+  cursor: pointer;
+  transition: transform 0.3s;
+  width: 80px; height: 80px;
+}
+.search-icon:hover {
+  opacity: 0.9;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+.cart{
+  width: 80px; height: 80px;
+  transition: transform 0.3s;
+}
+.cart:hover{
+  opacity: 0.9;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* Search Modal */
+/*.search-modal {z-index: 6;}
+.search-modal-content {
+  width: 500px;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  position: relative;
+  animation: zoom 0.3s;
+}
+.close-btn-search {
+  position: absolute;
+  top: 15px; right: 10px;
+  font-size: 24px;
+  width: 25px; height: auto;
+  cursor: pointer;
+  color: #8C7764;
+}
+.close-btn-search:hover {
+  opacity: 0.8;
+}
+.search-title {
+  color: #F2AE2E;
+  letter-spacing: 6px;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+.search-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+.search-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.search-group label {
+  color: #8C7764;
+  font-size: 16px; font-weight: bold;
+}
+.search-select {
+  padding: 12px;
+  border: 2px solid #D2D904;
+  border-radius: 10px;
+  background-color: #f7f2af;
+  color: #8C7764;
+  font-family: "cute_word", sans-serif; font-size: 16px;
+  cursor: pointer;
+  outline: none;
+}
+.search-select:disabled {opacity: 0.5; cursor: not-allowed;}
+.search-enter-btn {
+  width: 100%;
+  background-color: #ffd9e6; color: #F28972;
+  border: 2px dotted #ffb6c1;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 18px; font-family: "cute_word", sans-serif;
+  cursor: pointer;
+}
+.search-enter-btn:hover {opacity: 0.8;}*/
+
+/* Search Modal */
+.search-modal {
+  z-index: 6;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.search-modal-content {
+  width: 90%;
+  max-width: 500px;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  position: relative;
+  animation: zoom 0.3s;
+}
+
+.close-btn-search {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  background: #f0f0f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8C7764;
+  font-size: 20px;
+  border: none;
+}
+
+.close-btn-search:hover {
+  background: #e0e0e0;
+  opacity: 0.8;
+}
+
+.search-title {
+  color: #F2AE2E;
+  letter-spacing: 6px;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.search-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.search-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.search-group label {
+  color: #8C7764;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* 自訂下拉選單 */
+.custom-select {
+  position: relative;
+}
+
+.select-header {
+  padding: 12px;
+  border: 2px solid #D2D904;
+  border-radius: 10px;
+  background-color: #fffbb9;
+  color: #8C7764;
+  font-family: "cute_word", sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.select-header.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.select-header::after {
+  content: '▼';
+  font-size: 12px;
+  transition: transform 0.3s;
+  margin-left: 10px;
+}
+
+.select-header.active::after {
+  transform: rotate(180deg);
+}
+
+.select-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background: rgb(255, 255, 234) ;
+  border: 2px solid #D2D904;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  z-index: 10;
+  display: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-top: -2px;
+}
+
+.select-options.active {
+  display: block;
+}
+
+.select-option {
+  padding: 12px;
+  cursor: pointer;
+  color: #8C7764;
+  font-family: "cute_word", sans-serif;
+  transition: background 0.2s;
+}
+
+.select-option:hover {
+  background: #fffab7;
+}
+
+.select-option.selected {
+  background: #F2AE2E;
+  color: rgb(255, 255, 234) ; 
+}
+
+.search-enter-btn {
+  width: 100%;
+  background-color: #ffd9e6;
+  color: #F28972;
+  border: 2px dotted #ffb6c1;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 18px;
+  font-family: "cute_word", sans-serif;
+  cursor: pointer;
+}
+
+.search-enter-btn:hover {
+  opacity: 0.8;
+}
+
+/* 手機響應式 */
+@media screen and (max-width: 376px) {
+  .search-modal-content {
+    width: 95%;
+    max-width: 340px;
+    padding: 25px 20px;
+  }
+  
+  .search-title {
+    font-size: 20px;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+  }
+  
+  .search-inputs {
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .search-group label {
+    font-size: 13px;
+  }
+  
+  .select-header {
+    font-size: 13px;
+    padding: 10px;
+  }
+  
+  .select-option {
+    font-size: 13px;
+    padding: 10px;
+  }
+  
+  .select-options {
+    max-height: 150px;
+  }
+  
+  .search-enter-btn {
+    font-size: 15px;
+    padding: 10px;
+  }
+  
+  .close-btn-search {
+    width: 20px;
+    height: 20px;
+    top: 12px;
+    right: 12px;
+    font-size: 16px;
+  }
+}
+/* Hero */
+.new-arrivals{
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+/*新品上市動畫*/
+.hero{
+  opacity: 0;                   /* 頁面初始透明 */
+  animation: fadeIn 1s ease forwards; /* 執行 fadeIn 動畫，1秒完成 */
+  position: relative; z-index: 0;}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.hero-text {position: absolute; top: 20%; left: 10%; color: white;text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+.hero-text .main-title
+.hero-text .shop-btn {
+  background: black; color: white;
+  padding: 12px 24px; text-decoration: none;
+}
+.shop-btn{
+  color: #ffb6c1;
+  display: inline-block;
+}
+.shop-btn:hover{
+  transform: scale(1.5);
+  cursor: pointer;
+}
+.hero-img{
+  border-radius: 10px;
+  width: 100%; height: 400px;
+  opacity: 0.75;
+}
+
+/* food Grid */
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 一排固定三個 */
+  gap: 16px;
+  margin-top: 16px;
+  justify-content: start; /* 讓最後一排靠左 */
+}
+.food-card{
+  background-color: rgb(239, 255, 230);
+  border-radius: 50px 50px 15px 15px ;
+  border: 2px dashed rgb(207, 255, 198);
+  border-bottom: none;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
+  justify-content: space-between; /* ← 這行是關鍵 */
+  height: 100%; 
+}
+.food-card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 50px;
+  padding: 0;
+}
+.food-name {font-size: 18px; color: #8C7764; letter-spacing: 4px;margin-top: 10px;margin-left: 10px;}
+.food-name-comm{font-size: 13.5px; color: #8C7764; letter-spacing: 3px;}
+.food-price {font-size: 14px; color: #8C7764;text-align:right; position: relative; right: 10px;}
+
+#main-dish ,#side-dish,#drinks,#dessert{
+  display: flex; justify-content: center;
+  color: #F2AE2E;
+  letter-spacing: 8px;
+}
+.main-dish-subtitle{
+  display: flex; justify-content: center;
+  color: #F2AE2E;
+  letter-spacing: 6px;
+  margin-top: 15px;
+}
+.drinks-name{font: size 10px; color: #c4b7a4;}
+.buy-it {
+  display: flex; justify-content: center;
+  color: #F28972; background-color: #ffd9e6;/* 可修改 */
+  border: 2px dotted #ffb6c1;
+  border-radius: 12px;
+  margin: 12px;
+  flex-shrink: 0;
+}
+.buy-it:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+
+
+/* 當滑鼠移到食物圖上方，會出現遮罩與放大檢視的字樣 */
+/* 每一張圖片的容器 */
+.food-picture {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50px;
+  padding: 12px;
+}
+.food-picture:hover{cursor: pointer;}
+
+/* 遮罩初始狀態 */
+.overlay2 {
+  position: absolute;
+  top: 12px; left: 12px; right: 12px; bottom: 12px; /* 加上 padding 的值 */
+  display: flex; align-items: center; justify-content: center;
+  width: auto; height: auto;
+  color: white; background-color: rgba(0, 0, 0, 0.5);
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 50px;
+  pointer-events: none;
+}
+
+/* 滑鼠移上時的效果 */
+.food-picture:hover .overlay2 {opacity: 1; cursor: pointer;}
+
+/* 圖片放大檢視 */
+/* 外層遮罩 */
+.show-food {
+  position: fixed;
+  top: 0; left: 0;
+  display: none;  justify-content: center; align-items: center;
+  width: 100%; height: 100%;
+  z-index: 4;
+}
+/* 半透明黑背景 */
+.overlay3 {
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex; justify-content: center; align-items: center;
+}
+/* 白色內容框 */
+.food-information {
+  position: relative;
+  display: flex; gap: 30px;
+  width: 70%; max-width: 900px;
+  height: 400px; max-height: 400px;
+  padding: 20px;
+  border-radius: 50px;
+  background:#fffeed;
+  animation: zoom 0.3s;
+}
+
+
+/* 左側區塊（圖片） */
+.left-side {
+  display: flex; flex-direction: column;align-items: center;
+  width: 57%; height: 100%;
+  border-radius: 50px;
+  overflow: hidden;     /* ⭐ 必須，讓內容超出範圍被裁掉 */
+}
+/* 圖片本身 */
+.show-food-picture {
+  max-width: 100%; max-height: 100%;
+  object-fit: cover;
+  border-radius: 50px;
+}
+/* 右側區塊（文字資訊） */
+.right-side {
+  display: flex; flex-direction: column;
+  padding-top: 40px;
+  width: 43%;
+}
+/* 各欄位基本排版 */
+.show-food-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #8C7764;
+}
+.show-food-name-comm {
+  font-size: 0.95rem;
+  color: #8C7764;
+}
+.show-food-introduction {
+  font-size: 1rem;
+  line-height: 1.4rem;
+  color: #8C7764;
+  white-space: pre;
+}
+.show-food-price {
+  text-align: right;
+  font-size: 2rem; font-weight: bold;
+  color: #e67e22;
+  margin-top: auto; margin-right: 20px;
+}
+.show-buy-it{ font-size: 18pt;}
+/* 關閉按鈕 */
+.close {
+  position: absolute;
+  right: 20px; top: 25px;
+  width: 30px; height: 30px;
+  font-size: 28px;
+  cursor: pointer;
+}
+/* 放大動畫 */
+@keyframes zoom {
+  from {transform: scale(0.7); opacity: 0;}
+  to {transform: scale(1); opacity: 1;}
+}
+
+/* 跳轉失敗的畫面 */
+.show-failed {display: none;}
+.close-failed {
+  width: 30px; height: auto;
+  padding-top: 5px;
+}
+.close-failed:hover {opacity: 0.8;}
+.overlay4 {
+  position: fixed;
+  display: flex; justify-content: center; align-items: center;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.8);
+}
+.information{
+  display: block;
+  position: relative;
+  z-index: 2;
+  background-color: white;
+  padding: 25px 50px;
+  border-radius: 8px;
+  animation: zoom 0.3s;
+}
+.close-failed {
+  position: absolute;
+  right: 10px; top: 0;
+  font-size: 28px; font-weight: bold;
+  cursor: pointer;
+}
+.close-failed:hover {color: #ff4d4d;}
+
+/* shopping cart 固定在網頁的右下角 */
+.shopping-cart {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  width: 7.5%; height: auto;
+  z-index: 5;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+}
+
+.shopping-cart:hover{
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* 按下加入購物車的按鈕之後，食物圖片會移動到購物車並縮小消失 */
+.fly-img {
+  position: fixed;
+  width: auto; height: 300px;
+  border-radius: 50px;
+  pointer-events: none;
+  transition: transform 0.8s ease, opacity 0.8s ease;
+  z-index: 2;
+}
+.show-fly-img{
+  position: fixed;
+  max-width: 473.1px; max-height: 360px;
+  border-radius: 50px;
+  pointer-events: none;
+  transition: transform 0.8s ease, opacity 0.8s ease;
+  z-index: 5;
+}
+
+
+
+/* Subscribe section */
+.subscribe-section {
+  margin-left: 250px; padding: 16px; transition: margin-left 0.3s ease;
+  background-color: #f7e074; color: #731702;
+  padding: 32px;
+  text-align: center;
+}
+.subscribe-section h1 {margin-bottom: 12px;}
+.subscribe-section p {margin-bottom: 12px;}
+
+/* Input */
+.subscribe-input {
+  width: 100%;
+  padding: 8px;
+  background-color: #f7f2af;
+  border-radius: 15px; border: 2px solid #D2D904/*#e6c3c3*/;
+  border-radius: 5px;outline: none;
+}
+.subscribe-input::placeholder {font-family: cute_word;}
+
+/* Button */
+.subscribe-btn {
+  background-color:#f7f2af; color: #731702;
+  font-size: 16px; font-family: cute_word;
+  padding: 12px 24px;
+  margin-bottom: 12px;
+  border: 2px dashed  #8C7764; border-radius: 30px;
+  cursor: pointer;
+}
+.subscribe-btn:hover {opacity: 0.8;}
+
+
+
+/* Footer container */
+.footer {
+  margin-left: 250px; padding: 0 16px 16px 16px;
+  background-color: #b4e8e6;
+  font-size: 0.875rem; text-align: center;
+  transition: margin-left 0.3s ease;
+}
+/* Footer row & columns */
+.footer-big {font-size: 18px; color: #731702;}
+.footer-row {
+  display: flex; flex-wrap: wrap;
+  gap: 48px;
+  justify-content: center;
+}
+.footer-col {
+  flex: 1 1 200px; /* 自適應欄寬 */
+  text-align: left;
+  color: #8C7764;
+}
+.footer-subrow {
+  display: flex;
+  gap: 24px;
+  flex: 1 1 200px; /* wrapper 也會跟其他欄位排列 */
+  color: #8C7764;
+}
+.footer-col h4 {margin-bottom: 12px;}
+
+/* Contact form inputs */
+.footer-col.contact input, textarea {
+  width: 100%;
+  padding: 8px; margin-bottom: 8px;
+  border: 1px solid #ccc;
+}
+#about-us:hover,
+#support:hover,
+#payment:hover,
+#help:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+
+.submitBtn {
+  width: 100%;
+  background-color: #000; color: #fff;
+  padding: 12px; border: none;
+  cursor: pointer;
+}
+
+/* Links */
+.footer-col a {text-decoration: none; color: inherit;}
+.footer-col a:hover {text-decoration: underline;}
+
+/* Social icons */
+.social-icon {
+  font-size: 1.5rem;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+.social-icon:hover {opacity: 0.7;}
+
+/* Footer bottom */
+.footer-bottom {
+  text-align: center;
+  background-color:  #f7e074;; color: #8C7764;
+  padding: 24px;
+  margin-left: 250px;  transition: margin-left 0.3s ease;
+}
+.footer-link {color: inherit; text-decoration: none;}
+.footer-link:hover {opacity: 0.7;}
+.contact {font-size: 18px; color:#731702;}
+.contact-content {font-size: 14px; color: #8C7764;}
+.contact-img {position: relative; top: 10px;}
+.submitBtn {
+  background-color:rgb(230, 250, 255) ; color: #731702; font-family: cute_word;
+  font-size: 16px;
+  cursor: pointer;
+  border: 2px dashed  #8C7764; border-radius: 20px;
+}
+.submitBtn:hover {opacity: 0.8;}
+
+
+/* Modal */
+.modal {
+  display: none; justify-content: center; align-items: center;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 6;
+}
+.modal-content {
+  position: relative; max-width: 400px;
+  background: #FFFF99;
+  border-radius: 15px;
+  padding-left: 32px;padding-right: 32px;padding-top: 10px; padding-bottom: 20px;
+  margin: auto;
+  animation: zoom 0.3s;
+}
+.close-button {
+  position: absolute;
+  top: 20px; right: 20px;
+  cursor: pointer; width: 50px;}
+.close-button:hover {opacity: 0.8;}
+.newslettertext{color: #8C7764; letter-spacing: 8px;}
+.newslettertext-1{color: #8C7764; letter-spacing: 1.5px; }
+
+#newsletterModal {z-index: 3;}
+#emailInput {
+  background-color: #fffbc9;
+  border-radius: 15px; border: 2px solid #D2D904;
+  border-radius: 5px; outline: none;}
+#emailInput::placeholder {font-family: cute_word;}
+#subscribeModalBtn {
+  margin-left: 50px;
+  background-color: #fffbc9; color: #731702;
+  font-family: cute_word;
+  border: 2px dashed  #8C7764; border-radius: 10px;
+}
+#subscribeModalBtn:hover {opacity: 0.8;}
+
+
+
+/* 食物介紹區塊 - 預設隱藏 (大螢幕用) */
+.food-introduction {
+  display: none; flex-grow: 1; text-align: center;
+  font-size: 14px; 
+  color: #c4b7a4;
+  margin-right: 10px;
+}
+
+/* 小螢幕專用下拉選單容器 - 預設隱藏 */
+.food-intro-mobile {display: none; margin: 0 10px;}
+
+.intro-btn {
+  width: 100%;
+  background-color: transparent; color: #F2AE2E;
+  border: none;
+  font-size: 14px; font-family: "cute_word", sans-serif; text-align: left;
+  padding: 8px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.intro-btn:hover {color: #F2AE2E;}
+
+/* 下拉內容樣式 */
+.food-intro-mobile .food-introduction {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  margin: 10px 0; padding: 10px;
+  animation: slideDown 0.3s ease;
+}
+
+.food-intro-mobile .food-introduction.active {display: block;}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 響應式設計 - 中型螢幕 (平板) */
+@media screen and (max-width: 1025px) {
+  .food-card img {
+    width: 100%; height: 200px;
+    object-fit: cover;
+  }
+  .fly-img {width: auto; height: 200px;}
+  .modal {z-index: 5;}
+  #newsletterModal {z-index: 5;}
+  .show-fly-img {width: auto; max-height: 360px;}
+}
+
+/* 響應式設計 - 小螢幕 (手機) */
+@media screen and (max-width: 376px) {
+  /* Sidebar 調整 */
+  #sidebar { 
+    transform: translateX(-260px); 
+    position: fixed;
+    z-index: 4;
+  }
+  #closeSidebar {display: inline; top: 18px; right: 20px;}
+  #topbar {display: flex; background-color: #fbe792; color: #8C7764;}
+  .page-header-title {margin-top: 50px;}
+  .logo {margin-top: 20px;}
+  .cart{
+    margin-top: 30px;
+    width: 60px; height: 60px;
+  }
+  .search-icon {
+    font-size: 24px;
+    margin-top: 30px;
+    width: 60px; height: 60px;
+  }
+  /* 食物網格調整 */
+  .food-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .food-card img {
+    width: 100%; height: 300px;
+    object-fit: cover;
+  }
+  .fly-img {width: auto; height: 300px;}
+
+  /* 小螢幕：顯示下拉選單，隱藏放大功能 */
+  .food-intro-mobile {display: block;}
+  
+  .overlay2 {display: none; /* 隱藏「放大檢視」提示 */}
+
+  .information {font-size: 0.8em;}
+  .close-failed {width: 25px;}
+
+  /* 購物車調整 */
+  .shopping-cart {
+    width: 17.5%; height: auto;
+    z-index: 1;
+  }
+
+  /* 放大圖片區塊調整 */
+  .enlarge-picture {padding-top: 150px; padding-bottom: 150px;}
+  .close {top: 50px; right: 10px;}
+
+  /* newsletter */
+  .close-button {width: 35px;}
+  .newslettertext {font-size: 1em;}
+  .newslettertext-1 {font-size: 0.7em;}
+  .modal-content {max-width: 300px;}
+  .search-title {font-size: 22px; margin-bottom: 20px;}
+    #emailInput {width: 140px}
+  #subscribeModalBtn {font-size: 0.5em; margin-left: 10px;}
+
+  /* 移除 Sidebar margin */
+  #mainContent {margin-left: 0; }
+  .subscribe-section {margin-left: 0; }
+  .footer {margin-left: 0; }
+  .footer-bottom {margin-left: 0; }
+ 
+  .footer-col.about {padding-left:25px;}
+  .footer-col.store {padding-left: 15px;}
+  #main-dish, #side-dish, #drinks, #dessert, #subscribe,#footer {
+    scroll-margin-top: 75px; /* 視實際navbar高度調整 */
+  }
+}

@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Hungry Mimi </title>
+
+  <!-- 字型與圖示 -->
+  <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel = "stylesheet" href = "https://fonts.googleapis.com/css?family=Roboto|Montserrat">
+  <link rel = "shortcut icon" href = "img/main_dish.png" type = "image/png">
+  <link rel = "stylesheet" href = "style.css">
+  <link rel = "stylesheet" href = "jquery-ui/jquery-ui.css">
+  <script src = "jquery/jquery-3.7.1.min.js"></script>
+  <script src = "jquery-ui/jquery-ui.js"></script>
+  <script src = "script.js" defer></script>
+</head>
+
+<body>
+  <!-- 音效 -->
+  <audio id="jump-sound" src="music/jump12.mp3"></audio>
+  <audio id="put-sound" src="music/putting_a_heavy_box.mp3"></audio>
+  <audio id="light-sound" src="music/voice_of_light.mp3"></audio>
+  <audio id="tallcase-sound" src="music/tallcase_C.mp3"></audio>
+  <audio id="cup-sound" src="music/putting_a_water_cup.mp3"></audio>
+  <audio id="box-sound" src="music/iron_box_O.mp3"></audio>
+  <audio id="cat-sound" src="music/cat_like1a.mp3"></audio>
+  <audio id="coin-sound" src="music/coin05.mp3"></audio>
+
+  <!-- Sidebar -->
+  <nav id="sidebar" class="sidebar">
+    <div class="logo">
+      <!--<h3> Hungry Mimi </h3>先留著看之後要怎麼改-->
+      <a href="#mainContent"><img src="img/logo.PNG" alt="" class="logophoto"></a>
+      <img src = "img/cross.png" id="closeSidebar" class="fa fa-remove close-btn">
+      <!--i → 傳統上用於「斜體文字」，但在 Font Awesome（圖示字型庫）裡，通常用來放圖示。-->
+      <!-- fa → 使用 Font Awesome 圖示系統。 -->
+      <!-- fa-remove → 指定圖示為「X」或「關閉」。 -->
+      <!-- close-btn → 自訂樣式控制外觀與互動 -->
+    </div>
+    <div class="dishfour">
+    <ul class="menu">
+      <li class = "main-dish"><a href="#main-dish">Main Dish</a></li>
+      <li class = "side-dish"><a href="#side-dish">Side Dish</a></li>
+      <li class = "drinks"><a href="#drinks">Drinks</a></li>
+      <li class = "dessert"><a href="#dessert">Dessert</a></li>
+    </ul>
+    </div>
+    <div class="snc">
+    <ul class="menu-bottom">
+      <li><a href="#subscribe" class="Subscribe">Subscribe</a></li>
+      <li><a href="javascript:void(0)" id="openNewsletter" class = "openNewsletter">Newsletter</a></li>
+      <li><a href="#footer" class="Contact">Contact</a></li>
+    </ul>
+    </div>
+  </nav>
+
+  <!-- Topbar for small screens 寬度大於 768px 時隱藏 Topbar -->
+  <header id="topbar">
+    <span> Hungry Mimi </span>
+    <i id="openSidebar" class="fa fa-bars menu-toggle"></i>
+  </header>
+
+  <!-- Overlay sidebar遮罩 -->
+  <div id="overlay" class="overlay1"></div>
+
+  <!-- Main Content -->
+  <main id="mainContent">
+    <header class="page-header">
+      <p class="page-header-title"> MENU </p>
+      <p class="page-header-actions">
+        <a href="shopping_page.html"><img src="img/Cart.PNG" class="cart"></a>
+        <img src="img/Search .PNG" id="openSearch" class="fa-search search-icon">
+      </p>
+    </header>
+
+    <!-- Search Modal -->
+    <!--<div id="searchModal" class="modal search-modal">
+      <div class="modal-content search-modal-content">
+        <img src = "img/cross.png" id="closeSearch" class="fa fa-remove close-btn-search">
+        <h2 class="search-title">Search Food</h2>
+        
+        <div class="search-inputs">
+          <div class="search-group">
+            <label>Category:</label>
+            <select id="categorySelect" class="search-select">
+              <option value="">Select Category</option>
+              <option value="main-dish">Main Dish</option>
+              <option value="side-dish">Side Dish</option>
+              <option value="drinks">Drinks</option>
+              <option value="dessert">Dessert</option>
+            </select>
+          </div>
+          
+          <div class="search-group">
+            <label>Food:</label>
+            <select id="foodSelect" class="search-select" disabled>
+              <option value="">Select Food</option>
+            </select>
+          </div>
+        </div>
+        
+        <button id="searchEnterBtn" class="search-enter-btn">Enter</button>
+      </div>
+    </div>-->
+<!-- Search Modal -->
+<div id="searchModal" class="modal search-modal">
+  <div class="modal-content search-modal-content">
+    <img src = "img/cross.png" id="closeSearch" class="fa fa-remove close-btn-search">
+    <h2 class="search-title">Search Food</h2>
+    
+    <div class="search-inputs">
+      <div class="search-group">
+        <label>Category:</label>
+        <div class="custom-select" id="categorySelect">
+          <div class="select-header" data-value="" data-placeholder="Select Category">Select Category</div>
+          <div class="select-options">
+            <div class="select-option" data-value="main-dish">Main Dish</div>
+            <div class="select-option" data-value="side-dish">Side Dish</div>
+            <div class="select-option" data-value="drinks">Drinks</div>
+            <div class="select-option" data-value="dessert">Dessert</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="search-group">
+        <label>Food:</label>
+        <div class="custom-select" id="foodSelect">
+          <div class="select-header disabled" data-value="" data-placeholder="Select Food">Select Food</div>
+          <div class="select-options"></div>
+        </div>
+      </div>
+    </div>
+    
+    <button id="searchEnterBtn" class="search-enter-btn">Enter</button>
+  </div>
+</div>
+    <!-- Hero Image ，大圖(新品上市) -->
+    <div class="hero">
+      <img src="img/main_dish1.jpg" alt="" class="hero-img">
+      <div class="hero-text">
+        <h1 class="new-arrivals">New arrivals</h1>
+        <p class="sub-title">COLLECTION 2030</p>
+        <a href="#main-dish" class="shop-btn">ORDER NOW</a>
+      </div>
+    </div>
+
+    <!-- food Grid 之後可以新增'加入購物車'的按鈕-->
+    <!-- 主食區 義式料理 Main dish section -->
+    <h1 id = "main-dish"> Main dish </h1>
+    <h3 class="main-dish-subtitle"> Italian food </h3>
+    <section id="food-grid" class="food-grid">
+      <div class="food-card" id="ocean-cream-boat">
+        <div class="food-picture">
+          <img src="img/main_dish1.jpg" alt="" class="food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class="food-name">
+          Ocean Cream Boat<br>
+          <span class="food-name-comm">(Creamy sauce penne with clam)</span>
+        </div>
+        
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Penne boats float on creamy seas,<br>
+Tiny clams sparkle with glee!<br>
+Ride the waves of yum with me!<br>
+          </div>
+        </div>
+        
+        <div class="food-price">
+          $250
+        </div>
+        <div class="buy-it">
+          Add to cart
+        </div>
+      </div>
+
+      <div class="food-card" id="green-sail-adventure">
+        <div class = "food-picture">
+          <img src="img/main_dish2.jpg" alt="">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class="food-name">
+          Green Sail Adventure<br>
+          <span class="food-name-comm">(Pesto spaghetti with clam)</span>
+        </div>
+        
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Bright green waves and pasta sails,<br>
+Tiny clams hum with herby breeze,<br>
+Come explore the tasty seas!
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $250
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+      </div>
+
+      <div class="food-card" id="garden-cream-path">
+        <div class = "food-picture">
+          <img src="img/main_dish3.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class = "food-name">
+          Garden Cream Path<br>
+          <span class="food-name-comm">(Creamy spaghetti with veggies)</span>
+        </div>
+        
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Soft and smooth, the veggies sway,<br>
+Tiny veggie buddies laugh and play,<br>
+Taste the peace of nature&apos;s dream.
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $200
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+      </div>
+
+      <div class="food-card" id="green-waves-feast">
+        <div class = "food-picture">
+          <img src="img/main_dish4.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class = "food-name">
+          Green Waves Feast<br>
+          <span class="food-name-comm">(Pesto shell pasta with fried chicken)</span>
+        </div>
+        
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Tiny pasta shells in green waves<br>
+Crunchy chicken leaps and plays<br>
+Let&apos;s run and play along the way!
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $250
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+      </div>
+
+      <div class="food-card" id="sunset-seafood-risotto">
+        <div class = "food-picture">
+          <img src="img/main_dish5.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class = "food-name">
+          Sunset Seafood Risotto<br>
+          <span class="food-name-comm">(Orange sauce risotto with seafood)</span>
+        </div>
+        
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Golden rice glows like evening light<br>
+Seafood friends dance in delight<br>
+Hopes and laughter fill each bite
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $270
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+
+      </div>
+
+      <div class="food-card" id="morning-glow-risotto">
+        <div class = "food-picture">
+          <img src="img/main_dish6.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+
+        <div class = "food-name">
+          Morning Glow Risotto<br>
+          <span class="food-name-comm">(Creamy risotto with grilled pork)</span>
+        </div>
+        
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+White sauce drifts like morning light<br>
+Roasted pork rests in creamy delight<br>
+Every bite feels warm and bright
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $250
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+      </div>
+    </section>
+    <!-- 主食區 其他 Main dish section -->
+    <h3 class="main-dish-subtitle"> Others </h3>
+    <section id="food-grid" class="food-grid">
+      <div class="food-card" id="cozy-pork-hug">
+        <div class = "food-picture">
+          <img src="img/main_dish7.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class="food-name">
+          Cozy Pork Hug<br>
+          <span class="food-name-comm">(Pork burger)</span>
+        </div>
+        
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Soft buns hug them side by side<br>
+Lettuce leaves and pork inside<br>
+A joyful ride with every try
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $150
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+      </div>
+
+      <div class="food-card" id="curry-volcano">
+        <div class = "food-picture">
+          <img src="img/main_dish8.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class="food-name">
+          Curry Volcano<br>
+          <span class="food-name-comm">(Yaki curry)</span>
+        </div>
+        
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Spicy lava starts to flow,<br>
+Curry waves crash to the core,<br>
+Feel the warmth from head to toe!
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $200
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+      </div>
+
+      <div class="food-card" id="hero-steak">
+        <div class = "food-picture">
+          <img src="img/main_dish9.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class="food-name">
+          Hero&apos;s Steak<br>
+          <span class="food-name-comm">(Hamburger steak)</span>
+        </div>
+       
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Steak in secret land,<br>
+Magic steam at your command,<br>
+Power sparkles on your tongue!
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $250
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 配菜 Side dish section -->
+    <h1 id = "side-dish"> Side dish </h1>
+    <section id="food-grid" class="food-grid">
+      <div class="food-card" id="little-explorer-salad">
+        <div class = "food-picture">
+          <img src="img/side_dish1.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+
+        <div class="food-name">
+          Little Explorer Salad<br>
+          <span class="food-name-comm">(Salad with tomatos)</span>
+        </div>
+        
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Colorful, crisp, and full of cheer!<br>
+Cool as the breeze, fresh and clear.<br>
+Adventure starts right here!
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $120
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+
+      </div>
+
+      <div class="food-card" id="golden-fry-party">
+        <div class = "food-picture">
+          <img src="img/side_dish2.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+
+        <div class="food-name">
+          Golden Fry Party<br>
+          <span class="food-name-comm">(French fries)</span>
+        </div>
+        
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Crispy fries, golden and bright! <br>
+Jump, crunch, and munch with delight! <br>
+A playful snack for little bites!
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $90
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+
+      </div>
+
+      <div class="food-card" id="cheesy-pesto-bread">
+        <div class = "food-picture">
+          <img src="img/side_dish3.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+
+        <div class="food-name">
+          Cheesy Pesto Bread<br>
+          <span class="food-name-comm">(Pesto cheese bread)</span>
+        </div>
+        
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Crispy fries, golden and bright! <br>
+Jump, crunch, and munch with delight! <br>
+A playful snack for little bites!
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $90
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 飲料 Drinks section -->
+    <h1 id = "drinks"> Drinks </h1>
+    <section id="food-grid" class="food-grid">
+      <div class="food-card" id="creamy-cheese-dream">
+        <div class = "food-picture">
+          <img src="img/drinks1.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class="food-name">
+          Creamy Cheese Dream<br>
+          <span class="food-name-comm">(Cheese tea)</span>
+        </div>
+        
+        <!-- 小螢幕專用：下拉選單 -->
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Sweet tea naps beneath a cheese cloud.<br>
+Creamy, dreamy — fly to dreamland!<br>
+Close your eyes — adventure awaits!
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $100
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+
+      </div>
+
+      <div class="food-card" id="banana-sparkle-milk">
+        <div class = "food-picture">
+          <img src="img/drinks2.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class="food-name">
+          Banana Sparkle Milk<br>
+          <span class="food-name-comm">(Banana milk)</span>
+        </div>
+        
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Bouncy banana, twirling milk,<br>
+A magical hug for tiny heroes!<br>
+Sip, smile, and sparkle!
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $100
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+      </div>
+
+      <div class="food-card" id="fruit-parade">
+        <div class = "food-picture">
+          <img src="img/drinks3.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class="food-name">
+          Fruit Parade<br>
+          <span class="food-name-comm">(Fresh fruit tea)</span>
+        </div>
+        
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Juicy fruits are dancing in your tea!<br>
+Colors flying — every drop is a fruity treat!<br>
+Jump in, sip up, and start your fruity party!
+          </div>
+        </div>
+        
+        <div class = "food-price">
+          $100
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+      </div>
+    </section>
+
+    <!-- 甜點 Desserts section -->
+    <h1 id = "dessert"> Dessert </h1>
+    <section id="food-grid" class="food-grid">
+      <div class="food-card" id="golden-caramel-pudding">
+        <div class = "food-picture">
+          <img src="img/dessert1.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class="food-name">
+          Golden Caramel Pudding<br>
+          <span class="food-name-comm">(Caramel custard)</span>
+        </div>
+        
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Pudding wobbles, caramel drips,<br>
+Whipped cream hats and cherry tips!<br>
+Tiny spoons on a sweet discovery! 
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $150
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+
+      </div>
+
+      <div class="food-card" id="frosty-rainbow-cream">
+        <div class = "food-picture">
+          <img src="img/dessert2.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+        <div class="food-name">
+          Frosty Rainbow Cream<br>
+          <span class="food-name-comm">(Vanilla flavor ice cream)</span>
+        </div>
+        
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Every scoop makes happiness grow!<br>
+Icy magic flows with rainbow fruits,<br>
+Each spoonful sparkles with fun!
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $150
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+
+      </div>
+
+      <div class="food-card" id="creamy-puff-surprise">
+        <div class = "food-picture">
+          <img src="img/dessert3.jpg" alt="" class = "food-picture">
+          <div class="overlay2"><span>See more infos</span></div>
+        </div>
+
+        <div class="food-name">
+          Creamy Puff Surprise<br>
+          <span class="food-name-comm">(Crispy cream puff)</span>
+        </div>
+        
+        <div class="food-intro-mobile">
+          <button class="intro-btn">See more infos ▼</button>
+          <div class="food-introduction">
+Crispy outside, creamy surprise inside,<br>
+smooth cream wiggles with every bite,<br>
+Find the creamy treasure hidden inside.
+          </div>
+        </div>
+
+        <div class = "food-price">
+          $80
+        </div>
+        <div class = "buy-it">
+          Add to cart
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="show-food" class="show-food">
+    <div class="overlay3">
+      <div class="food-information">
+        <img src="img/cross.png" alt="" id="close" class="close">
+
+        <!-- 左邊 -->
+        <div class="left-side">
+          <img id="show-food-picture" class="show-food-picture">
+        </div>
+
+        <!-- 右邊 -->
+        <div class="right-side">
+          <div id="show-food-name" class="show-food-name"></div>
+          <div id="show-food-name-comm" class="show-food-name-comm"></div>
+          <div id="show-food-introduction" class="show-food-introduction"></div>
+          <div id="show-food-price" class="show-food-price"></div>
+          <div class="show-buy-it buy-it"> Add to cart </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 跳轉失敗的畫面 -->
+  <div id = show-failed class = "show-failed">
+    <div id = "overlay4" class = "overlay4">
+      <div id = "information" class = "information">
+        <img src = "img/cross.png" id = "close-failed" class = "close-failed">
+        <div id = "failed" class = "failed"> This is just a virtual website QWQ </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- shopping cart -->
+  <a href="shopping_page.html"> <!-- 按下購物車之後，會跳到的頁面 -->
+    <img src="img/shopping_cart.png" id="shopping-cart" class = "shopping-cart" alt="購物車">
+  </a>
+
+  <!-- Subscribe section -->
+  <div class="subscribe-section">
+    <h1 id="subscribe">Subscribe</h1>
+    <p>To get more coupons and the latest information!</p>
+    <p><input type="text" placeholder="Enter your e-mail" class="subscribe-input"></p>
+    <button type="button" id = "subscribe-btn" class="subscribe-btn">Subscribe</button>
+  </div>
+
+
+
+  <!-- Footer -->
+  <footer id="footer" class="footer">
+    <div class="footer-row">
+      <div class="footer-col contact">
+        <h4 id="contact">Contact</h4>
+        <p class="contact-content">Questions? Go ahead.</p>
+        <a href="https://forms.gle/sZtgwUp2NfKFazaw6" target="_blank" rel="noopener noreferrer"><button type="submit" class="submitBtn">Send</button></a>
+        <img src="img/Contact.png" class="contact-img">
+          <!--表單送出後，資料會傳送到這個網址（這裡只是範例）我查了這個有點複雜，要用js但不太緊急。-->
+          <!-- 送出後會在新分頁開啟結果。 -->
+          <!--<p><input type="text" placeholder="Name" name="Name" required></p>
+          <p><input type="text" placeholder="Email" name="Email" required></p>
+          <p><input type="text" placeholder="Subject" name="Subject" required></p>
+          <p><textarea name="Message" placeholder="Message" required></textarea></p>-->
+          <!-- placeholder="" 提示文字顯示在輸入框內。 -->
+          <!-- name="" 欄位的名稱（提交時用於識別資料）。 -->
+          <!-- required 表示這一欄必填。 -->
+          <!-- textarea 通常是多行訊息 -->
+          <!--<button type="submit" class="submitBtn">Send</button>-->
+          <!--type="submit" 讓它在按下時提交整個 <form>-->
+          <!--</form>-->
+      </div>
+
+      <div class="footer-subrow">
+        <div class="footer-col about">
+          <h4 class="footer-big">About</h4>
+          <p id = "about-us">About us</p>
+          <p id = "support">Support</p>
+          <p id = "payment">Payment</p>
+          <p id = "help">Help</p>
+        </div>
+        <div class="footer-col store">
+          <h4 class="footer-big">Store</h4>
+          <p><i class="fa fa-fw fa-clock"></i> 11:00~21:00</p>
+          <p><i class="fa fa-fw fa-phone"></i> 0123456789</p>
+          <p><i class="fa fa-fw fa-envelope"></i> hungmi@mail.com</p>
+          <h4 class="footer-big">We accept</h4>
+          <p><i class="fa fa-fw fa-credit-card"></i> Credit Card</p>
+          <br>
+          <!--<a href="https://www.facebook.com/?locale=zh_TW" target="_blank" rel="noopener noreferrer"><i class="fa fa-brands fa-facebook-official social-icon"></i></a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><i class="fa fa-brands fa-instagram social-icon"></i></a>
+          <a href="https://x.com/" target="_blank" rel="noopener noreferrer"><i class="fa fa-brands fa-x-twitter social-icon"></i></a>-->
+        </div>
+          
+        
+      </div>
+    </div>
+    <div class="sns">
+      <a href="https://www.facebook.com/?locale=zh_TW" target="_blank" rel="noopener noreferrer"><i class="fa fa-brands fa-facebook-official social-icon"></i></a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><i class="fa fa-brands fa-instagram social-icon"></i></a>
+          <a href="https://x.com/" target="_blank" rel="noopener noreferrer"><i class="fa fa-brands fa-x-twitter social-icon"></i></a>
+    </div>
+  </footer>
+
+  <div class="footer-bottom">
+    Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" class="footer-link">w3.css</a>
+    <!--target="_blank" 點擊後會在「新分頁」開啟連結-->
+  </div>
+
+  <!-- Newsletter Modal -->
+  <div id="newsletterModal" class="modal">
+    <div class="modal-content">
+      <img src="img/cross.png" alt="" id="closeNewsletter" class="close-button">
+      <h2 class="newslettertext">NEWSLETTER</h2>
+      <p class="newslettertext-1">Join our mailing list to get more coupons and the latest information!</p>
+      <input type="text" placeholder="Enter e-mail" id="emailInput">
+      <button id="subscribeModalBtn">Subscribe</button>
+    </div>
+  </div>
+</body>
+</html>

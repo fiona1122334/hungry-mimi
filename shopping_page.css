@@ -1,0 +1,148 @@
+@font-face { /* 可愛字體 */
+  font-family: 'cute_word';
+  src: url('font/Humour-Normal.woff2') format('woff2'); /*/humour_web*/
+  font-weight: normal; font-style: normal;
+}
+.back-page {
+    position: absolute;
+    width: 2.5%; 
+    right: 25px; top: 30px;
+}
+.back-page:hover {opacity: 0.8;}
+
+body {
+    font-family: "cute_word", sans-serif;
+    background-color: #b4e8e6;
+    padding: 20px;
+}
+
+h2 {color: #731702; text-align: center;}
+
+.shopping-cart {width: 2.5%;}
+.cart-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.cart-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 100px;
+}
+
+
+
+.cart-item {
+    display: flex; align-items: center; justify-content: space-between;
+    color: #731702; background: #e5f1f1;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+}
+
+.cart-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.cart-info img {
+    width: 150px; height: 150px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.cart-info span {font-size: 18px;}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.quantity-control button {
+    width: 25px; height: 25px;
+    background-color: white;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.quantity-control button:hover {opacity: 0.7;}
+
+.remove-btn {
+    background-color: #ff4d4d; color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'cute_word';
+}
+
+.remove-btn:hover {opacity: 0.7;}
+
+#total {
+    font-weight: bold;
+    text-align: right;
+    margin-top: 20px; margin-bottom: 10px;
+    font-size: 20px;
+    color: #484848;
+}
+
+.checkout {
+    background-color: #ff4d4d; color: white;
+    text-align: center;
+    border-radius: 12px;
+}
+.checkout:hover {cursor: pointer; background-color: #ff6b6b;}
+.show-checkout-failed {display: none;}
+.overlay1 {
+    position: fixed;
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.8);
+}
+.checkout-information{
+    display: block;
+    position: relative;
+    z-index: 2;
+    background-color: white;
+    padding: 25px 50px;
+    border-radius: 8px;
+    animation: zoom 0.3s;
+}
+.checkout.hidden {display: none;}
+
+@keyframes zoom {
+  from {transform: scale(0.7); opacity: 0;}
+  to {transform: scale(1); opacity: 1;}
+}
+.close {
+    position: absolute;
+    right: 10px; top: 0;
+    font-size: 28px; font-weight: bold;
+    cursor: pointer;
+    width: 30px; height: auto;
+    padding-top: 5px;
+}
+.close:hover {opacity: 0.8;}
+
+/* 響應式 */
+@media screen and (max-width: 376px) {
+    .back-page {width: 10%;}
+    .shopping-cart {width: 12.5%;}
+    .cart-info img {
+        flex-shrink: 0;
+        width: 80px; height: 80px;
+        border-radius: 5px;
+        object-fit: cover;
+    }
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Hungry Mimi </title>
+
+  <!-- 字型與圖示 -->
+  <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel = "stylesheet" href = "https://fonts.googleapis.com/css?family=Roboto|Montserrat">
+  <link rel = "shortcut icon" href = "img/shopping_cart.png" type = "image/png">
+  <link rel = "stylesheet" href = "shopping_page.css">
+  <link rel = "stylesheet" href = "jquery-ui/jquery-ui.css">
+  <script src = "jquery/jquery-3.7.1.min.js"></script>
+  <script src = "jquery-ui/jquery-ui.js"></script>
+  <script src = "shopping_page.js" defer></script>
+</head>
+<body>
+  <!-- 音效 -->
+  <audio id="tallcase-sound" src="music/tallcase_C.mp3"></audio>
+
+  <!-- 返回上一頁 -->
+  <a href = "Index.html">
+      <img src = "img/cross.png" id = "back-page" class = "back-page" alt="回到上一頁">
+  </a>
+    
+  <h2 class="cart-title"><img src = "img/shopping_cart.png" class = "shopping-cart"> My Cart</h2>
+
+  <div id = "cart-list"></div>
+  <div id = "total"></div>
+  <div id = "checkout" class = "checkout">Checkout</div>
+  <div id = show-checkout-failed class = "show-checkout-failed">
+    <div id = "overlay1" class = "overlay1">
+      <div id = "checkout-information" class = "checkout-information">
+        <img src = "img/cross.png" id = "close" class = "close">
+        <div id = "checkout-failed" class = "checkout-failed"> This is just a virtual website QWQ </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
